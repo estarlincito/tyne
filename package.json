@@ -1,0 +1,61 @@
+{
+  "name": "tyne",
+  "type": "module",
+  "version": "1.0.0-beta.1",
+  "description": "Tyne is a minimalist, type-safe schema system for defining data shapes, inferring TypeScript types, validating runtime data, and generating `.d.ts` files. Built for speed, clarity, and type fidelity.",
+  "types": "./dist/esm/index.d.ts",
+  "main": "./dist/esm/index.mjs",
+  "module": "./dist/cjs/index.cjs",
+  "bin": {
+    "tyne": "./dist/cjs/cli.cjs"
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "clean": "rm -rf dist",
+    "build": "pnpm lint && pnpm vite build",
+    "build:w": "pnpm vite build -w",
+    "git": "rm -rf dist && pnpm build && read -p \"Enter commit message: \" msg; git add .; git commit -m \"$msg\"; git push && npm publish --access public"
+  },
+  "keywords": [
+    "types",
+    "schema",
+    "validation",
+    "typescript",
+    "runtime validation",
+    "type inference",
+    "dts generation",
+    "type-safe",
+    "schema definition",
+    "tyne",
+    "zod alternative",
+    "minimal",
+    "typed schemas"
+  ],
+  "author": {
+    "name": "Estarlin R",
+    "email": "dev@estarlincito.com",
+    "url": "https://estarlincito.com"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "dist"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/estarlincito/tyne#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/estarlincito/tyne.git"
+  },
+  "bugs": {
+    "url": "https://github.com/estarlincito/tyne/issues"
+  },
+  "devDependencies": {
+    "@estarlincito/eslint": "^1.9.0",
+    "eslint": "^9.29.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vite-plugin-dts": "^4.5.4"
+  }
+}
