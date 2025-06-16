@@ -1,4 +1,1 @@
-export const tyne = () => {
-  // eslint-disable-next-line no-console
-  console.log('Hello Tyne');
-};
+export * as t from './core/index.js';

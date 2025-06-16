@@ -16,5 +16,5 @@
     "paths": { "@/*": ["src/*"] }
   },
   "include": ["**/*.ts", "eslint.config.js", "vite.config.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "playground"]
 }
