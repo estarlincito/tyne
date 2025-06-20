@@ -12,3 +12,4 @@ export type { TyneUrl } from './core/url.js';
 export type { TyneInstanceOf } from './core/instance.js';
 export type { TyneEmail } from './core/email.js';
 export type { TyneTel } from './core/tel.js';
+export type { TyneLiteral } from './core/literal.js';

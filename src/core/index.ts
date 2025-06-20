@@ -3,6 +3,7 @@ export { boolean } from './boolean.js';
 export { email } from './email.js';
 export type { infer } from './infer.js';
 export { instanceOf } from './instance.js';
+export { literal } from './literal.js';
 export { number } from './number.js';
 export { object } from './object.js';
 export { string } from './string.js';
