@@ -8,3 +8,7 @@ export type { TyneObject } from './core/object.js';
 export type { TyneString } from './core/string.js';
 export type { TyneUnion } from './core/union.js';
 export type { TyneTuple } from './core/tuple.js';
+export type { TyneUrl } from './core/url.js';
+export type { TyneInstanceOf } from './core/instance.js';
+export type { TyneEmail } from './core/email.js';
+export type { TyneTel } from './core/tel.js';

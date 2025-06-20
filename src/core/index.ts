@@ -1,8 +1,12 @@
 export { array } from './array.js';
 export { boolean } from './boolean.js';
+export { email } from './email.js';
 export type { infer } from './infer.js';
+export { instanceOf } from './instance.js';
 export { number } from './number.js';
 export { object } from './object.js';
 export { string } from './string.js';
+export { tel } from './tel.js';
 export { tuple } from './tuple.js';
 export { union } from './union.js';
+export { url } from './url.js';
