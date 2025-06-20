@@ -7,3 +7,4 @@ export type { TyneNumber } from './core/number.js';
 export type { TyneObject } from './core/object.js';
 export type { TyneString } from './core/string.js';
 export type { TyneUnion } from './core/union.js';
+export type { TyneTuple } from './core/tuple.js';

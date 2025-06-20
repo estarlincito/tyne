@@ -4,7 +4,7 @@ import { TyneType } from './tyne.js';
 export class TyneArray<T extends TyneType> extends TyneType<T['_type'][]> {
   readonly kind = 'array';
 
-  constructor(public readonly shape: T) {
+  constructor(public readonly element: T) {
     super();
   }
 
@@ -13,7 +13,7 @@ export class TyneArray<T extends TyneType> extends TyneType<T['_type'][]> {
       return { error: 'Expected array', success: false };
 
     for (let i = 0; i < value.length; i += 1) {
-      const safe = this.shape.safeValidate(value[i]);
+      const safe = this.element.safeValidate(value[i]);
 
       if (!safe.success) {
         return { error: `[${i}]: ${safe.error}`, success: false };
@@ -30,10 +30,10 @@ export class TyneArray<T extends TyneType> extends TyneType<T['_type'][]> {
   }
 
   toDts(name: string) {
-    const innerType = this.shape.toDts('');
+    const innerType = this.element.toDts('');
 
     return name ? `export type ${name} = ${innerType}[]` : `${innerType}[]`;
   }
 }
 
-export const array = <T extends TyneType>(shape: T) => new TyneArray(shape);
+export const array = <T extends TyneType>(element: T) => new TyneArray(element);

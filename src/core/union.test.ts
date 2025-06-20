@@ -7,16 +7,14 @@ import { union } from './union.js';
 describe('TyneUnion', () => {
   // toDts
   it('should generate a named TypeScript type when a name is provided', () => {
-    const result = union([string(), object({ name: string() })]).toDts(
-      'MyType',
-    );
+    const result = union(string(), object({ name: string() })).toDts('MyType');
     expect(result).toContain(`export type MyType = string | {
   name: string;
 }`);
   });
 
   it('should generate an inline union type when no name is provided', () => {
-    const result = union([string(), object({ name: string() })]).toDts('');
+    const result = union(string(), object({ name: string() })).toDts('');
     expect(result).toContain(`string | {
   name: string;
 }`);
@@ -24,7 +22,7 @@ describe('TyneUnion', () => {
 
   // validate
   it('should return the value if it matches any branch of the union', () => {
-    const result = union([string(), object({ name: string() })]).validate({
+    const result = union(string(), object({ name: string() })).validate({
       name: 'Jhon',
     });
     expect(result).toStrictEqual({ name: 'Jhon' });
@@ -32,22 +30,20 @@ describe('TyneUnion', () => {
 
   it('should throw an error if the value does not match any branch', () => {
     expect(() =>
-      union([string(), object({ name: string() })]).validate(0),
+      union(string(), object({ name: string() })).validate(0),
     ).toThrowError('No branch in union matched the value');
   });
 
   // safeValidate
   it('should return success=true if the value matches any branch', () => {
-    const result = union([string(), object({ name: string() })]).safeValidate({
+    const result = union(string(), object({ name: string() })).safeValidate({
       name: 'Apple',
     });
     expect(result).toEqual({ success: true });
   });
 
   it('should return success=false with an error if the value does not match any branch', () => {
-    const result = union([string(), object({ name: string() })]).safeValidate(
-      0,
-    );
+    const result = union(string(), object({ name: string() })).safeValidate(0);
     expect(result).toEqual({
       error: 'No branch in union matched the value',
       success: false,

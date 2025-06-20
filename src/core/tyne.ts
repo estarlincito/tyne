@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export abstract class TyneType<T = any> {
-  abstract kind: string;
+  abstract readonly kind: string;
   declare _type: T;
 
   abstract safeValidate(value: unknown): { success: boolean; error?: string };

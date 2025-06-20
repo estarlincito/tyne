@@ -1,19 +1,18 @@
 /* eslint-disable safeguard/no-raw-error */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { TyneType } from './tyne.js';
 
-type Shape = TyneType<any>[];
-
-export class TyneUnion<T extends Shape> extends TyneType<T[number]['_type']> {
+export class TyneUnion<T extends TyneType[]> extends TyneType<
+  T[number]['_type']
+> {
   readonly kind = 'union';
 
-  constructor(public readonly shape: T) {
+  constructor(public readonly elements: T) {
     super();
   }
 
   safeValidate(value: unknown) {
-    for (const ty of this.shape) {
+    for (const ty of this.elements) {
       const safe = ty.safeValidate(value);
       if (safe.success) return { success: true };
     }
@@ -31,11 +30,12 @@ export class TyneUnion<T extends Shape> extends TyneType<T[number]['_type']> {
 
   toDts(name: string): string {
     return name
-      ? `export type ${name} = ${this.shape
+      ? `export type ${name} = ${this.elements
           .map((ty) => ty.toDts(''))
           .join(' | ')}`
-      : `${this.shape.map((ty) => ty.toDts('')).join(' | ')}`;
+      : `${this.elements.map((ty) => ty.toDts('')).join(' | ')}`;
   }
 }
 
-export const union = <T extends Shape>(shape: T) => new TyneUnion(shape);
+export const union = <T extends TyneType[]>(...elements: T) =>
+  new TyneUnion(elements);
