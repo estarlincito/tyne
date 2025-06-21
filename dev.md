@@ -1,7 +1,5 @@
 - `npm publish --tag beta`
 
-- literal
-- optional
 - params:
 
   - message
@@ -10,8 +8,8 @@
   - pattern
 
 - DEFAULT value in object and array
-- union
-- add
-- shape
+- enums
+- refine
+- transform
 
 // declare my schema and then iterate over it to return a new schema

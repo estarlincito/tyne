@@ -2,7 +2,7 @@
 /* eslint-disable safeguard/no-raw-error */
 import { TyneType } from './tyne.js';
 
-export class TyneInstanceOf<T> extends TyneType<T> {
+export class TyneInstanceof<T> extends TyneType<T> {
   readonly kind = 'instanceof';
 
   constructor(private readonly ctor: new (...args: any[]) => T) {
@@ -33,4 +33,4 @@ export class TyneInstanceOf<T> extends TyneType<T> {
 }
 
 export const instanceOf = <T>(ctor: new (...args: any[]) => T) =>
-  new TyneInstanceOf<T>(ctor);
+  new TyneInstanceof<T>(ctor);
