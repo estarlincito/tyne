@@ -1,52 +1,105 @@
-/* eslint-disable safeguard/no-raw-error */
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { TyneType } from './tyne.js';
+/* eslint-disable safeguard/no-raw-error */
+import { TyneDefault, TyneOptional, TyneType } from './tyne.js';
 
 type Shape = Record<string, TyneType<any>>;
 
-export class TyneObject<T extends Shape> extends TyneType<{
-  [K in keyof T]: T[K]['_type'];
-}> {
+type TypeFor<T> = T extends TyneType<infer U>
+  ? T extends TyneOptional<any> | TyneDefault<any, any>
+    ? U | undefined
+    : U
+  : never;
+
+type ReturnType<T extends Shape> = {
+  [K in keyof T]: T[K] extends TyneOptional<any> | TyneDefault<any, any>
+    ? Partial<Record<K, TypeFor<T[K]>>>
+    : Record<K, TypeFor<T[K]>>;
+}[keyof T];
+
+export class TyneObject<T extends Shape> extends TyneType<ReturnType<T>> {
   readonly kind = 'object';
 
   constructor(public readonly shape: T) {
     super();
   }
 
-  safeValidate(value: unknown) {
-    if (typeof value !== 'object' || value === null)
-      return { error: 'Expected object', success: false };
+  safeValidate(value: unknown): { success: boolean; error?: string } {
+    if (value === null || typeof value !== 'object') {
+      return {
+        error: `Expected object, got ${value === null ? 'null' : typeof value}`,
+        success: false,
+      };
+    }
+
+    const valueObj = value as Record<string, unknown>;
+    const errors: string[] = [];
+    const allowedKeys = new Set(Object.keys(this.shape));
 
     for (const key in this.shape) {
-      const res = this.shape[key].safeValidate((value as any)[key]);
+      if (Object.prototype.hasOwnProperty.call(this.shape, key)) {
+        const validator = this.shape[key];
+        const propValue = valueObj[key];
 
-      if (!res.success)
-        return { error: `${key}: ${res.error}`, success: false };
+        if (
+          propValue === undefined &&
+          (validator instanceof TyneOptional ||
+            validator instanceof TyneDefault)
+        ) {
+          continue;
+        }
+
+        const result = validator.safeValidate(propValue);
+        if (!result.success) {
+          errors.push(`"${key}": ${result.error}`);
+        }
+      }
+    }
+
+    const unexpectedKeys = Object.keys(valueObj).filter(
+      (k) => !allowedKeys.has(k),
+    );
+
+    if (unexpectedKeys.length > 0) {
+      errors.push(
+        `Unexpected properties: ${unexpectedKeys
+          .map((k) => `"${k}"`)
+          .join(', ')}`,
+      );
+    }
+
+    if (errors.length > 0) {
+      return {
+        error: `Object validation failed:\n  - ${errors.join('\n  - ')}`,
+        success: false,
+      };
     }
 
     return { success: true };
   }
 
-  validate(value: unknown) {
-    const safe = this.safeValidate(value);
-    if (safe.success)
-      return value as {
-        [K in keyof T]: T[K]['_type'];
-      };
-    throw new Error(safe.error);
+  validate(value: unknown): ReturnType<T> {
+    const result = this.safeValidate(value);
+    if (result.success) return value as ReturnType<T>;
+    throw new Error(result.error);
   }
 
-  toDts(name: string) {
-    const keys = Object.keys(this.shape) as (keyof T)[];
-    if (keys.length === 0) {
-      return name ? `export type ${name} = any;` : `any`;
+  toDts(name: string): string {
+    const entries = Object.entries(this.shape);
+
+    if (entries.length === 0) {
+      return name ? `export type ${name} = Record<string, never>;` : '{}';
     }
 
-    const fields = keys
-      .map((key) => `  ${String(key)}: ${this.shape[key].toDts('')};`)
-      .join('\n');
+    const fields = entries.map(([key, type]) => {
+      const typeDef = type.toDts('');
+      const isOptional =
+        type instanceof TyneOptional || type instanceof TyneDefault;
 
-    const body = `{\n${fields}\n}`;
+      return `  ${JSON.stringify(key)}${isOptional ? '?' : ''}: ${typeDef}`;
+    });
+
+    const body = `{\n${fields.join(';\n')}\n}`;
 
     return name ? `export type ${name} = ${body};` : body;
   }
