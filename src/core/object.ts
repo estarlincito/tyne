@@ -1,6 +1,8 @@
+/* eslint-disable no-shadow */
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable safeguard/no-raw-error */
+
 import { TyneDefault, TyneOptional, TyneType } from './tyne.js';
 
 type Shape = Record<string, TyneType<any>>;
@@ -13,8 +15,8 @@ type TypeFor<T> = T extends TyneType<infer U>
 
 type ReturnType<T extends Shape> = {
   [K in keyof T]: T[K] extends TyneOptional<any> | TyneDefault<any, any>
-    ? Partial<Record<K, TypeFor<T[K]>>>
-    : Record<K, TypeFor<T[K]>>;
+    ? { [K in keyof T]?: TypeFor<T[K]> }
+    : { [K in keyof T]: TypeFor<T[K]> };
 }[keyof T];
 
 export class TyneObject<T extends Shape> extends TyneType<ReturnType<T>> {

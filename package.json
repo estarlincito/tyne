@@ -1,7 +1,7 @@
 {
   "name": "tyne",
   "type": "module",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Tyne is a minimalist, type-safe schema system for defining data shapes, inferring TypeScript types, validating runtime data, and generating `.d.ts` files. Built for speed, clarity, and type fidelity.",
   "types": "./dist/esm/index.d.ts",
   "main": "./dist/cjs/index.cjs",
