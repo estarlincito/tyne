@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable safeguard/no-raw-error */
@@ -13,11 +12,20 @@ type TypeFor<T> = T extends TyneType<infer U>
     : U
   : never;
 
-type ReturnType<T extends Shape> = {
+type OptionalKeys<T extends Shape> = {
   [K in keyof T]: T[K] extends TyneOptional<any> | TyneDefault<any, any>
-    ? { [K in keyof T]?: TypeFor<T[K]> }
-    : { [K in keyof T]: TypeFor<T[K]> };
+    ? K
+    : never;
 }[keyof T];
+
+type RequiredKeys<T extends Shape> = Exclude<keyof T, OptionalKeys<T>>;
+
+type Prettify<T> = { [K in keyof T]: T[K] } & {};
+
+type ReturnType<T extends Shape> = Prettify<
+  Pick<{ [K in keyof T]: TypeFor<T[K]> }, RequiredKeys<T>> &
+    Partial<Pick<{ [K in keyof T]: TypeFor<T[K]> }, OptionalKeys<T>>>
+>;
 
 export class TyneObject<T extends Shape> extends TyneType<ReturnType<T>> {
   readonly kind = 'object';
