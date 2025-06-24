@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-base-to-string */
-/* eslint-disable safeguard/no-raw-error */
-import { TyneType } from './tyne.js';
+
+import { TyneType } from './tyne/index.js';
 
 export class TyneLiteral<
   T extends string | number | boolean | null,
@@ -9,57 +9,46 @@ export class TyneLiteral<
 
   constructor(private readonly literalValue: T) {
     super();
-  }
+    this.checks.push((value, ctx) => {
+      // Handle special cases for NaN and -0
 
-  safeValidate(value: unknown): { success: boolean; error?: string } {
-    // Handle special cases for NaN and -0
-    if (
-      typeof this.literalValue === 'number' &&
-      Number.isNaN(this.literalValue)
-    ) {
-      if (typeof value === 'number' && Number.isNaN(value)) {
-        return { success: true };
+      if (
+        typeof this.literalValue === 'number' &&
+        Number.isNaN(this.literalValue)
+      ) {
+        if (typeof value === 'number' && !Number.isNaN(value)) {
+          ctx.addIssue({
+            code: 'invalid_type',
+            message: `Expected NaN`,
+          });
+        }
       }
-      return { error: `Expected NaN`, success: false };
-    }
 
-    if (
-      typeof this.literalValue === 'number' &&
-      Object.is(this.literalValue, -0)
-    ) {
-      if (Object.is(value, -0)) {
-        return { success: true };
+      if (
+        typeof this.literalValue === 'number' &&
+        Object.is(this.literalValue, -0)
+      ) {
+        if (!Object.is(value, -0)) {
+          ctx.addIssue({
+            code: 'invalid_type',
+            message: `Expected -0`,
+          });
+        }
       }
-      return { error: `Expected -0`, success: false };
-    }
 
-    // Handle normal equality comparison
-    if (value !== this.literalValue) {
-      return {
-        error: `Expected literal ${this.formatLiteralForError(
-          this.literalValue,
-        )}, got ${this.formatLiteralForError(value)}`,
-        success: false,
-      };
-    }
-
-    return { success: true };
+      // Handle normal equality comparison
+      if (value !== this.literalValue) {
+        ctx.addIssue({
+          code: 'invalid_type',
+          message: `Expected literal ${this.formatLiteralForError(
+            this.literalValue,
+          )}, got ${this.formatLiteralForError(value)}`,
+        });
+      }
+    });
   }
 
-  validate(value: unknown): T {
-    const result = this.safeValidate(value);
-    if (result.success) return value as T;
-    throw new Error(
-      result.error ??
-        `Expected ${this.formatLiteralForError(this.literalValue)}`,
-    );
-  }
-
-  toDts(name: string): string {
-    const literalType = this.formatLiteralForType(this.literalValue);
-
-    return name ? `export type ${name} = ${literalType};` : literalType;
-  }
+  toDts = (): string => this.formatLiteralForType(this.literalValue);
 
   private formatLiteralForError(value: unknown): string {
     if (value === null) return 'null';

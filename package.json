@@ -1,7 +1,7 @@
 {
   "name": "tyne",
   "type": "module",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Tyne is a minimalist, type-safe schema system for defining data shapes, inferring TypeScript types, validating runtime data, and generating `.d.ts` files. Built for speed, clarity, and type fidelity.",
   "types": "./dist/esm/index.d.ts",
   "main": "./dist/cjs/index.cjs",
@@ -12,13 +12,13 @@
   "scripts": {
     "git": "pnpm version-patch && read -p \"Enter commit message: \" msg; git add .; git commit -m \"$msg\"; git push",
     "version-patch": "npm version patch",
-    "prepare": "pnpm clean && pnpm lint && pnpm check-types && pnpm build",
+    "prepublishOnly": "pnpm clean && pnpm lint && pnpm check-types && pnpm build",
     "release": "npm publish --access public",
     "test": "vitest",
     "check-types": "tsc --noEmit",
     "lint": "eslint . --max-warnings 0",
     "clean": "rm -rf dist",
-    "build": "pnpm lint && pnpm vite build",
+    "build": "pnpm vite build",
     "dev": "pnpm vite build -w"
   },
   "keywords": [
