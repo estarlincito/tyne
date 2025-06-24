@@ -1,4 +1,4 @@
-import { TyneType } from './tyne/index.js';
+import { TyneType } from '@/v1/utilities/index.js';
 
 export class TyneUnion<T extends TyneType[]> extends TyneType<
   T[number]['_type']

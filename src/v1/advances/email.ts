@@ -1,4 +1,4 @@
-import { TyneType } from './tyne/index.js';
+import { TyneType } from '@/v1/utilities/index.js';
 
 export class TyneEmail extends TyneType<string> {
   readonly kind = 'email';

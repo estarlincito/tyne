@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { TyneType } from './tyne/index.js';
+import { TyneType } from '@/v1/utilities/index.js';
 
 export class TyneArray<T extends TyneType> extends TyneType<T['_type'][]> {
   readonly kind = 'array';

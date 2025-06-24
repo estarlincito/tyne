@@ -3,8 +3,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type { TyneTuple } from './tuple.js';
-import { TyneDefault, TyneOptional, TyneType } from './tyne/index.js';
+import type { TyneTuple } from '@/v1/advances/tuple.js';
+import { TyneDefault, TyneOptional, TyneType } from '@/v1/utilities/index.js';
 
 type Shape = Record<string, TyneType<any>>;
 

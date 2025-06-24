@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-base-to-string */
 
-import { TyneType } from './tyne/index.js';
+import { TyneType } from '@/v1/utilities/index.js';
 
 export class TyneLiteral<
   T extends string | number | boolean | null,

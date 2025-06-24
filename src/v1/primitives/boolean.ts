@@ -1,7 +1,7 @@
-import { TyneType } from './tyne/index.js';
+import { TyneType } from '@/v1/utilities/index.js';
 
-export class TyneUndefined extends TyneType<undefined> {
-  readonly kind = 'undefined';
+export class TyneBoolean extends TyneType<boolean> {
+  readonly kind = 'boolean';
 
   constructor() {
     super();
@@ -18,4 +18,4 @@ export class TyneUndefined extends TyneType<undefined> {
   toDts = () => this.kind;
 }
 
-export const undef = () => new TyneUndefined();
+export const boolean = () => new TyneBoolean();
