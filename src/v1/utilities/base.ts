@@ -2,8 +2,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable sort-keys-fix/sort-keys-fix */
 
-import { type CheckFn, TyneContext, type TyneIssue } from '@/utils/context.js';
-import { TyneError } from '@/utils/error.js';
+import {
+  type CheckFn,
+  TyneContext,
+  type TyneIssue,
+} from '@/v1/utilities/context.js';
+import { TyneError } from '@/v1/utilities/error.js';
 
 import { getDependency } from './dependencies.js';
 import type { RefineFn, RefineOpts } from './refined.js';
