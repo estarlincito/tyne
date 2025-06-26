@@ -17,8 +17,4 @@ export class TyneContext {
       path: issue.path ?? [],
     });
   }
-
-  // withPath(key: string | number) {
-  //   return new TyneContext(this.issues, [...this.path, key]);
-  // }
 }

@@ -9,9 +9,12 @@ import {
 } from '@/v1/utilities/context.js';
 import { TyneError } from '@/v1/utilities/error.js';
 
+import type { TyneDefault } from './default.js';
 import { getDependency } from './dependencies.js';
-import type { RefineFn, RefineOpts } from './refined.js';
-import type { TransformFn } from './transformed.js';
+import type { TyneNullable } from './nullable.js';
+import type { TyneOptional } from './optional.js';
+import type { RefineFn, RefineOpts, TyneRefined } from './refined.js';
+import type { TransformFn, TyneTransformed } from './transformed.js';
 
 interface SafeValidate<T> {
   success: boolean;
@@ -48,33 +51,33 @@ export abstract class TyneType<T = any> {
 
   toDts = (): string => 'any';
 
-  optional = (): TyneType<T | undefined> => {
-    const TyneOptional = getDependency('optional');
+  optional = (): TyneOptional<T> => {
+    const Optional = getDependency<typeof TyneOptional>('optional');
 
-    return new TyneOptional(this);
+    return new Optional(this);
   };
 
-  nullable = (): TyneType<T | null> => {
-    const TyneNullable = getDependency('nullable');
+  nullable = (): TyneNullable<T> => {
+    const Nullable = getDependency<typeof TyneNullable>('nullable');
 
-    return new TyneNullable(this);
+    return new Nullable(this);
   };
 
-  default = <D>(def: D): TyneType<D> => {
-    const TyneDefault = getDependency('default');
+  default = <D extends T>(def: D): TyneDefault<T, D> => {
+    const Default = getDependency('default');
 
-    return new TyneDefault(this, def);
+    return new Default(this, def);
   };
 
-  refine = (refiner: RefineFn<T>, options: RefineOpts): TyneType<T> => {
-    const TyneRefined = getDependency('refined');
+  refine = (refiner: RefineFn<T>, options: RefineOpts): TyneRefined<T> => {
+    const Refined = getDependency<typeof TyneRefined>('refined');
 
-    return new TyneRefined(this, refiner, options);
+    return new Refined(this, refiner, options);
   };
 
-  transform = <U>(transformer: TransformFn<T, U>): TyneType<U> => {
-    const TyneTransformed = getDependency('transform');
+  transform = <U>(transformer: TransformFn<T, U>): TyneTransformed<T, U> => {
+    const Transformed = getDependency<typeof TyneTransformed>('transform');
 
-    return new TyneTransformed(this, transformer);
+    return new Transformed(this, transformer);
   };
 }

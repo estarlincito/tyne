@@ -4,7 +4,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type { TyneTuple } from '@/v1/advances/tuple.js';
-import { TyneDefault, TyneOptional, TyneType } from '@/v1/utilities/index.js';
+import { TyneType } from '@/v1/utilities/base.js';
+import { TyneDefault } from '@/v1/utilities/default.js';
+import { TyneOptional } from '@/v1/utilities/optional.js';
 
 type Shape = Record<string, TyneType<any>>;
 

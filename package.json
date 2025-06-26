@@ -1,13 +1,12 @@
 {
   "name": "tyne",
   "type": "module",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Tyne is a minimalist, type-safe schema system for defining data shapes, inferring TypeScript types, validating runtime data, and generating `.d.ts` files. Built for speed, clarity, and type fidelity.",
-  "types": "./dist/esm/index.d.ts",
-  "main": "./dist/cjs/index.cjs",
-  "module": "./dist/esm/index.mjs",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
   "bin": {
-    "tyne": "./dist/cjs/cli.cjs"
+    "tyne": "./dist/cli.js"
   },
   "scripts": {
     "git": "pnpm version-patch && read -p \"Enter commit message: \" msg; git add .; git commit -m \"$msg\"; git push",
@@ -57,6 +56,7 @@
   },
   "devDependencies": {
     "@estarlincito/eslint": "^1.9.0",
+    "@types/node": "^24.0.4",
     "eslint": "^9.29.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",

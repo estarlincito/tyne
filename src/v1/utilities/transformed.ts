@@ -6,7 +6,7 @@ import { registerDependency } from './dependencies.js';
 export type TransformFn<T, U> = (data: T) => U;
 
 /** Represents a transformed TyneType instance */
-class TyneTransformed<T, U> extends TyneType<U> {
+export class TyneTransformed<T, U> extends TyneType<U> {
   readonly kind = 'transformed';
 
   constructor(
